@@ -1,18 +1,30 @@
+import { useEffect, useState } from "react";
+
 function App() {
   const environment = import.meta.env.VITE_ENVIRONMENT ?? "local";
-  const apiUrl = import.meta.env.VITE_API_URL ?? "not configured";
+  const apiUrl = import.meta.env.VITE_API_URL ?? "";
+
+  const [message, setMessage] = useState("Loading...");
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/message`)
+      .then((response) => response.json())
+      .then((data) => {
+        setMessage(data.message);
+      })
+      .catch(() => {
+        setMessage("API request failed");
+      });
+  }, [apiUrl]);
 
   return (
     <div style={{ padding: 40, fontFamily: "Arial" }}>
-      <h1>My Azure Demo</h1>
-
+      <h1>Aircraft Profile Feature</h1>
       <h2>Environment: {environment}</h2>
 
-      <p>API URL: {apiUrl}</p>
+      <p>API: {apiUrl}</p>
 
-      <hr />
-
-      <p>If you are seeing this page, the application is running.</p>
+      <h3>{message}</h3>
     </div>
   );
 }
