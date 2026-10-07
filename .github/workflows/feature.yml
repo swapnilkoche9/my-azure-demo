@@ -1,0 +1,29 @@
+name: Feature CI
+
+on:
+  push:
+    branches:
+      - "feature/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: my-azure-demo/package-lock.json
+
+      - name: Install dependencies
+        working-directory: my-azure-demo
+        run: npm ci
+
+      - name: Build
+        working-directory: my-azure-demo
+        run: npm run build
